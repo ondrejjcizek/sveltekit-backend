@@ -1,10 +1,12 @@
-import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import { redirect } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async (event) => {
-	event.cookies.set('authToken', '', {
+export const load: PageServerLoad = async ({ cookies }) => {
+	cookies.set('authToken', '', {
 		path: '/',
-		expires: new Date(0)
+		httpOnly: true,
+		sameSite: 'strict',
+		secure: process.env.NODE_ENV === 'production'
 	});
 
 	throw redirect(302, '/login');

@@ -1,22 +1,24 @@
-import { db } from '$lib/server/db.js';
-import { usersTable } from '$lib/server/schema.js';
-import { error, redirect } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
-import bcrypt from 'bcrypt';
-import { createAuthJWT } from '$lib/server/jwt.js';
 import type { Actions, PageServerLoad } from './$types';
+import { db } from '$lib/server/db.js';
+import { eq } from 'drizzle-orm';
+import { usersTable } from '$lib/server/schema.js';
+import { createAuthJWT } from '$lib/server/jwt.js';
+import bcrypt from 'bcrypt';
+import { error, redirect } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async (event) => {
-	const token = event.cookies.get('authToken');
+export const load: PageServerLoad = async ({ cookies }) => {
+	const token = cookies.get('authToken');
 
+	// ensure the user is logged in
 	if (token && token !== '') {
 		throw redirect(301, '/');
 	}
 };
 
 export const actions: Actions = {
-	default: async (event) => {
-		const formData = await event.request.formData();
+	default: async ({ cookies, request }) => {
+		// prepare request body
+		const formData = await request.formData();
 		const email = formData.get('email');
 		const password = formData.get('password');
 
@@ -56,8 +58,13 @@ export const actions: Actions = {
 			id: user[0].id
 		});
 
-		event.cookies.set('authToken', token, {
-			path: '/'
+		// setting expiring time for one month
+		cookies.set('authToken', token, {
+			path: '/',
+			httpOnly: true,
+			sameSite: 'strict',
+			secure: process.env.NODE_ENV === 'production',
+			maxAge: 60 * 60 * 24 * 30
 		});
 
 		throw redirect(301, '/');

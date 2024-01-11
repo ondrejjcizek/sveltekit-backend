@@ -1,5 +1,10 @@
-<div class="flex flex-col items-center gap-8 w-full">
-	<form class="shadow-2xl w-full max-w-96 p-8 rounded-md" method="POST">
+<svelte:head>
+	<title>Todos - Register</title>
+	<meta name="description" content="Create, delete and complete your todos" />
+</svelte:head>
+
+<div class="-mt-16 flex h-screen w-full flex-col items-center justify-center gap-8">
+	<form class="w-full max-w-96 rounded-md p-8 shadow-2xl" method="POST">
 		<h2 class="text-center text-2xl font-semibold">Registration</h2>
 		<div class="divider"></div>
 		<label for="first_name" class="form-control w-full pb-2">
@@ -26,9 +31,9 @@
 			</div>
 			<input type="password" id="password" name="password" class="input input-bordered w-full" />
 		</label>
-		<div class="w-full flex justify-center pt-8">
-			<button type="submit" class="btn btn-active btn-neutral">Submit</button>
+		<div class="flex w-full justify-center pt-8">
+			<button type="submit" class="btn btn-neutral btn-active">Submit</button>
 		</div>
 	</form>
-	<a class="link link-hover" href="/login">You Have an Account?</a>
+	<a class="link-hover link" href="/login">You Have an Account?</a>
 </div>
