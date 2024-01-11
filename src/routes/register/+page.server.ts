@@ -3,18 +3,18 @@ import { usersTable } from '$lib/server/schema.js';
 import { createAuthJWT } from '$lib/server/jwt.js';
 import { redirect } from '@sveltejs/kit';
 import bcrypt from 'bcrypt';
+import type { Actions, PageServerLoad } from './$types';
 
-export const load = async (event) => {
-	const token = event.cookies.get('auth_token');
+export const load: PageServerLoad = async (event) => {
+	const token = event.cookies.get('authToken');
 
 	if (token) {
 		throw redirect(301, '/');
 	}
 };
 
-export const actions = {
+export const actions: Actions = {
 	default: async (event) => {
-		// NOTE: THIS SHOULD BE VALIDATED I'M JUST LAZY FOR THIS EXAMPLE
 		const formData = await event.request.formData();
 		const email = formData.get('email') || '';
 		const password = formData.get('password') || '';
@@ -37,10 +37,10 @@ export const actions = {
 			id: parseInt(newUser.insertId)
 		});
 
-		event.cookies.set('auth_token', token, {
+		event.cookies.set('authToken', token, {
 			path: '/'
 		});
 
-		throw redirect(301, '/account');
+		throw redirect(301, '/');
 	}
 };

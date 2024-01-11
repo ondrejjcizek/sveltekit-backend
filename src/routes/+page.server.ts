@@ -1,9 +1,9 @@
 import { redirect } from '@sveltejs/kit';
 
 export const load = async ({ cookies }) => {
-	const token = cookies.get('auth_token');
+	const token = cookies.get('authToken');
 
 	if (!token) {
-		throw redirect(301, '/sign-up');
+		throw redirect(301, '/login');
 	}
 };
