@@ -1,6 +1,12 @@
 import { relations } from 'drizzle-orm';
 import { boolean, int, mysqlTable, serial, text, varchar } from 'drizzle-orm/mysql-core';
 
+export const contact = mysqlTable('contact', {
+	firstName: varchar('first_name', { length: 100 }).notNull(),
+	lastName: varchar('last_name', { length: 100 }).notNull(),
+	email: varchar('email', { length: 255 }).primaryKey()
+});
+
 export const usersTable = mysqlTable('users', {
 	id: serial('id').primaryKey(),
 	first_name: varchar('first_name', { length: 255 }).notNull(),
