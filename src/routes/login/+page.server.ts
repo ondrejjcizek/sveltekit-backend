@@ -1,3 +1,9 @@
+import type { Config } from '@sveltejs/adapter-vercel';
+
+export const config: Config = {
+	runtime: 'nodejs18.x'
+};
+
 import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/server/db.js';
 import { eq } from 'drizzle-orm';
