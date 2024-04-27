@@ -4,7 +4,10 @@ import { eq } from 'drizzle-orm';
 import { usersTable } from '$lib/server/schema.js';
 import { createAuthJWT } from '$lib/server/jwt.js';
 import bcrypt from 'bcrypt';
-import { error, redirect } from '@sveltejs/kit';
+import { error, redirect, fail } from '@sveltejs/kit';
+import { superValidate } from 'sveltekit-superforms';
+import { formSchema } from './schema';
+import { zod } from 'sveltekit-superforms/adapters';
 
 export const load: PageServerLoad = async ({ cookies }) => {
 	const token = cookies.get('authToken');
@@ -13,18 +16,25 @@ export const load: PageServerLoad = async ({ cookies }) => {
 	if (token && token !== '') {
 		throw redirect(301, '/');
 	}
+
+	return {
+		form: await superValidate(zod(formSchema))
+	};
 };
 
 export const actions: Actions = {
 	default: async ({ cookies, request }) => {
-		// prepare request body
-		const formData = await request.formData();
-		const email = formData.get('email');
-		const password = formData.get('password');
+		const form = await superValidate(request, zod(formSchema));
+		console.log(form.data.email);
 
-		if (!email || !password) {
-			throw error(400, 'must provide an email and password');
+		if (!form.valid) {
+			return fail(400, {
+				form
+			});
 		}
+
+		const email = form.data.email;
+		const password = form.data.password;
 
 		// check if the user exists
 		const user = await db
