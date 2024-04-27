@@ -54,6 +54,7 @@
 		"mysql2": "^3.7.0",
 		"studio": "^0.13.5",
 		"tailwind-merge": "^2.3.0",
-		"tailwind-variants": "^0.2.1"
+		"tailwind-variants": "^0.2.1",
+		"vite-plugin-mkcert": "^1.17.5"
 	}
 }
