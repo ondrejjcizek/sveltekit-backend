@@ -2,7 +2,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/server/db.js';
 import { eq } from 'drizzle-orm';
 import { usersTable } from '$lib/server/schema.js';
-import { createAuthJWT } from '$lib/server/jwt.js';
+// import { createAuthJWT } from '$lib/server/jwt.js';
 import bcrypt from 'bcrypt';
 import { error, redirect, fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
@@ -61,21 +61,21 @@ export const actions: Actions = {
 		}
 
 		// create the JWT
-		const token = await createAuthJWT({
-			firstName: user[0].first_name,
-			lastName: user[0].last_name,
-			email: user[0].email,
-			id: user[0].id
-		});
+		// const token = await createAuthJWT({
+		// 	firstName: user[0].first_name,
+		// 	lastName: user[0].last_name,
+		// 	email: user[0].email,
+		// 	id: user[0].id
+		// });
 
 		// setting expiring time for one month
-		cookies.set('authToken', token, {
-			path: '/',
-			httpOnly: true,
-			sameSite: 'strict',
-			secure: process.env.NODE_ENV === 'production',
-			maxAge: 60 * 60 * 24 * 30
-		});
+		// cookies.set('authToken', token, {
+		// 	path: '/',
+		// 	httpOnly: true,
+		// 	sameSite: 'strict',
+		// 	secure: process.env.NODE_ENV === 'production',
+		// 	maxAge: 60 * 60 * 24 * 30
+		// });
 
 		throw redirect(301, '/');
 	}
