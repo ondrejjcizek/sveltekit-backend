@@ -6,7 +6,7 @@ const passwordValidation = new RegExp(
 );
 
 export const formSchema = z.object({
-	email: z.string().email({ message: 'E-mail není ve správném formátu' }),
+	username: z.string().min(1, { message: 'Toto pole nesmí byt prázdné' }),
 	password: z.string().regex(passwordValidation, {
 		message: 'Heslo nesplňuje požadavky'
 	})

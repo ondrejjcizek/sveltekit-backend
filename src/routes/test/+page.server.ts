@@ -18,7 +18,7 @@ export const actions: Actions = {
 				form
 			});
 		} else {
-			console.log(form);
+			// console.log(form);
 		}
 
 		return {

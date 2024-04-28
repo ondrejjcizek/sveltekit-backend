@@ -24,10 +24,10 @@
 				<!-- <Card.Description>Enter your email below to login to your account.</Card.Description> -->
 			</Card.Header>
 			<Card.Content class="grid gap-4">
-				<Form.Field {form} name="email">
+				<Form.Field {form} name="username">
 					<Form.Control let:attrs>
 						<Form.Label>E-mail</Form.Label>
-						<Input type="email" {...attrs} bind:value={$formData.email} />
+						<Input type="text" {...attrs} bind:value={$formData.username} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
