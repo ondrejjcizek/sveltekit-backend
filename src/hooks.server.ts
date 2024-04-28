@@ -1,32 +1,43 @@
-import { lucia } from '$lib/server/auth';
-import type { Handle } from '@sveltejs/kit';
+import { SvelteKitAuth } from '@airbadge/sveltekit';
 
-export const handle: Handle = async ({ event, resolve }) => {
-	const sessionId = event.cookies.get(lucia.sessionCookieName);
-	if (!sessionId) {
-		event.locals.user = null;
-		event.locals.session = null;
-		return resolve(event);
-	}
+// use GitHub OAuth provider
+import GitHub from '@auth/core/providers/github';
 
-	const { session, user } = await lucia.validateSession(sessionId);
-	if (session && session.fresh) {
-		const sessionCookie = lucia.createSessionCookie(session.id);
-		// sveltekit types deviates from the de-facto standard
-		// you can use 'as any' too
-		event.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: '.',
-			...sessionCookie.attributes
-		});
+// use Prisma database adapter
+import { PrismaAdapter } from '@auth/prisma-adapter';
+
+// import Prisma client for database adapter
+import { PrismaClient } from '@prisma/client';
+
+// import env vars for OAuth client
+import { env } from '$env/dynamic/private';
+
+// init database client
+const db = new PrismaClient();
+
+// add Auth.js + Stripe handler
+// API is similar to Auth.js
+export const handle = SvelteKitAuth({
+	adapter: PrismaAdapter(db),
+	providers: [
+		GitHub({
+			clientId: env.GITHUB_ID,
+			clientSecret: env.GITHUB_SECRET
+		})
+	],
+	secret: 'BRzKEp0Dyl0FGOO990ABSYnbIXvJmludYAwLyg2sGLY=',
+
+	// configure list of plans.
+	plans: [
+		{ id: 'basic', name: 'Basic', priceId: 'price_basic', price: 500, default: true },
+		{ id: 'pro', name: 'Pro', priceId: 'price_pro', price: 1000 },
+		{ id: 'enterprise', name: 'Enterprise', priceId: 'price_enterprise', price: 2000 }
+	],
+	pages: {
+		checkout: {
+			success: '/dashboard',
+			cancel: '/pricing'
+		},
+		portalReturn: '/dashboard'
 	}
-	if (!session) {
-		const sessionCookie = lucia.createBlankSessionCookie();
-		event.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: '.',
-			...sessionCookie.attributes
-		});
-	}
-	event.locals.user = user;
-	event.locals.session = session;
-	return resolve(event);
-};
+});
