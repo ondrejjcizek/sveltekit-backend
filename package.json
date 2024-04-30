@@ -9,27 +9,22 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write .",
-		"stripe": "stripe listen --forward-to localhost:3000/api/webhooks"
+		"format": "prettier --write ."
 	},
 	"devDependencies": {
-		"@airbadge/sveltekit": "^0.0.5",
-		"@auth/core": "^0.30.0",
-		"@auth/prisma-adapter": "^2.0.0",
-		"@prisma/client": "^5.13.0",
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/eslint": "^8.56.0",
 		"@typescript-eslint/eslint-plugin": "^7.0.0",
 		"@typescript-eslint/parser": "^7.0.0",
+		"drizzle-kit": "^0.20.17",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-svelte": "^2.35.1",
+		"eslint-plugin-svelte": "^2.36.0-next.4",
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.1.2",
-		"prisma": "^5.13.0",
-		"svelte": "^4.2.7",
+		"svelte": "^5.0.0-next.1",
 		"svelte-check": "^3.6.0",
 		"tslib": "^2.4.1",
 		"typescript": "^5.0.0",
@@ -37,6 +32,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"vite-plugin-mkcert": "^1.17.5"
+		"@libsql/client": "^0.6.0",
+		"drizzle-orm": "^0.30.9"
 	}
 }
